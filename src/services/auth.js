@@ -1,9 +1,9 @@
-import { randomBytes } from "crypto";
 import bcrypt from "bcrypt";
 import createHttpError from "http-errors";
+import { randomBytes } from "crypto";
 import { UsersCollection } from "../db/models/User.js";
-import { FIFTEEN_MINUTES, ONE_DAY } from "../constants/index.js";
 import { SessionsCollection } from "../db/models/Session.js";
+import { FIFTEEN_MINUTES, ONE_DAY } from "../constants/index.js";
 
 export const registerUser = async (payload) => {
   const user = await UsersCollection.findOne({ email: payload.email });
@@ -73,9 +73,10 @@ export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
     throw createHttpError(401, "Session token expired");
   };
 
+  await SessionsCollection.deleteOne({ _id: sessionId, refreshToken });
+
   const newSession = createSession();
 
-  await SessionsCollection.deleteOne({ _id: sessionId, refreshToken });
 
   return await SessionsCollection.create({
     userId: session.userId,
