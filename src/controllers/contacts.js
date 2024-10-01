@@ -3,6 +3,7 @@ import { getAllContacts, getContactById, createContact, deleteContact, updateCon
 import { parsePaginationParams } from "../utils/parsePaginationParams.js";
 import { parseSortParams } from "../utils/parseSortParams.js";
 import { parseFilterParams } from "../utils/parseFilterParams.js";
+import { saveFileToUploadDir } from "../utils/saveFileToUploadDir.js";
 
 export const getContactsController = async (req, res) => {
   const userId = req.user._id;
@@ -80,6 +81,7 @@ export const upsertContactController = async (req, res, next) => {
 export const patchContactController = async (req, res, next) => {
   const userId = req.user._id;
   const { contactId } = req.params;
+
   const result = await updateContact(contactId, { ...req.body, userId });
 
   if (!result) {
