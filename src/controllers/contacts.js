@@ -21,6 +21,7 @@ export const getContactsController = async (req, res) => {
     sortBy,
     sortOrder,
     filter,
+    userId,
   });
 
   res.status(200).json({
@@ -78,7 +79,6 @@ export const upsertContactController = async (req, res, next) => {
 
   const result = await updateContact(contactId, { ...req.body, userId }, {
     upsert: true,
-    userId,
   });
 
   if (!result) {
